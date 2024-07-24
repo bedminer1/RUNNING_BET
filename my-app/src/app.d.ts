@@ -7,3 +7,11 @@ declare namespace App {
 	// interface Error {}
 	// interface Platform {}
 }
+
+interface WeeklyRecord {
+	weekID: number
+	myScore: number
+	herScore: number
+	neededScore: number
+	winForMe: boolean
+}

@@ -1,4 +1,6 @@
 <script lang="ts">
+	export let data
+
 	let myInput = ""
 	let herInput = ""
 	$: scoreNeeded = calculateCutoff(herInput)
@@ -31,4 +33,8 @@
 	{:else}
 		<p>윤아 wins</p>
 	{/if}
+
+	<div>
+		{JSON.stringify(data.records)}
+	</div>
 </div>
