@@ -34,7 +34,32 @@
 		<p>윤아 wins</p>
 	{/if}
 
-	<div>
-		{JSON.stringify(data.records)}
-	</div>
+	
+<!-- Responsive Container (recommended) -->
+<div class="table-container">
+	<!-- Native Table Element -->
+	<table class="table table-hover">
+		<thead>
+			<tr>
+				<th>week</th>
+				<th>Alex's Score</th>
+				<th>Yoona's Score</th>
+				<th>Needed Score</th>
+				<th>Who won?</th>
+			</tr>
+		</thead>
+		<tbody>
+			{#each data.records as record, i}
+				<tr>
+					<td>{record.weekID}</td>
+					<td>{record.myScore}</td>
+					<td>{record.herScore}</td>
+					<td>{record.neededScore}</td>
+					<td>{record.winForMe}</td>
+				</tr>
+			{/each}
+		</tbody>
+	</table>
+</div>
+
 </div>

@@ -31,6 +31,6 @@ function parseRecord(input: string): WeeklyRecord[] {
         }
         res.push(record)
     }
-    console.log(res)
+
     return res
 }
