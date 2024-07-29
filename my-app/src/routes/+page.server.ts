@@ -20,10 +20,12 @@ export const load = async () => {
 
 function parseRecord(input: string): WeeklyRecord[] {
     let res: WeeklyRecord[] = []
-    for (let line of input.split("\n")) {
+    let lines = input.split("\n")
+    for (let line of lines) {
+
         let data = line.split(" ")
         let record: WeeklyRecord = {
-            weekID: 1,
+            weekID: lines.indexOf(line) + 1,
             myScore: Number(data[0]),
             herScore: Number(data[1]),
             neededScore: Number(data[2]),

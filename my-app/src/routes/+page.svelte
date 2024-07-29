@@ -3,8 +3,8 @@
 
 	let myInput = ""
 	let herInput = ""
-	$: scoreNeeded = calculateCutoff(herInput)
-	$: winForMe = Number(myInput) > scoreNeeded
+	$: scoreNeeded = herInput === "" ? undefined : Number(calculateCutoff(herInput).toFixed(2))
+	$: winForMe = Number(myInput) > scoreNeeded!
 
 	function calculateCutoff(input: string): number {
 		let herScore: number = Number(input)
@@ -21,23 +21,23 @@
 </script>
 
 <div class="flex flex-col h-screen items-center justify-center">
-	<div class="w-1/4 flex flex-col gap-3 mb-5">
+	<form class="w-1/4 flex flex-col gap-3 mb-5">
 		<input type="text" bind:value={myInput} class="input" placeholder="Alex's score">
 		<input type="text" bind:value={herInput} class="input" placeholder="윤아's score">
-		<p class="pl-2">Distance needed for Alex: {scoreNeeded.toFixed(2)}</p>
-	</div>
-	{#if !myInput.length || !herInput.length}
-		<p>Please input scores</p>
-	{:else if winForMe}
-		<p>Alex wins</p>
-	{:else}
-		<p>윤아 wins</p>
-	{/if}
+		<input type="text" bind:value={scoreNeeded} class="input" placeholder="Distance cutoff">
+	</form>
 
-	
-<!-- Responsive Container (recommended) -->
-<div class="table-container">
-	<!-- Native Table Element -->
+	<div class="mb-10">
+		{#if !myInput.length || !herInput.length}
+			<p>Please input scores</p>
+		{:else if winForMe}
+			<p>Alex wins</p>
+		{:else}
+			<p>윤아 wins</p>
+		{/if}
+	</div>
+
+<div class="table-container w-1/2">
 	<table class="table table-hover">
 		<thead>
 			<tr>
