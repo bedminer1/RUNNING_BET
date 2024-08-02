@@ -21,10 +21,12 @@
 </script>
 
 <div class="flex flex-col h-screen items-center justify-center">
-	<form class="w-1/4 flex flex-col gap-3 mb-5">
-		<input type="text" bind:value={myInput} class="input" placeholder="Alex's score">
-		<input type="text" bind:value={herInput} class="input" placeholder="윤아's score">
-		<input type="text" bind:value={scoreNeeded} class="input" placeholder="Distance cutoff">
+	<form class="w-1/4 flex flex-col gap-3 mb-5" action="?/saveRecord" method="POST">
+		<input name="myScore" type="text" bind:value={myInput} class="input" placeholder="Alex's score">
+		<input name="herScore" type="text" bind:value={herInput} class="input" placeholder="윤아's score">
+		<input name="scoreNeeded" type="text" bind:value={scoreNeeded} class="input" placeholder="Distance cutoff">
+		<input name="winForMe" type="hidden" bind:value={winForMe}>
+		<button class="btn">Save Result</button>
 	</form>
 
 	<div class="mb-10">

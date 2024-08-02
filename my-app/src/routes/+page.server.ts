@@ -18,6 +18,18 @@ export const load = async () => {
     }
 }
 
+export const actions = {
+    saveRecord: async ({ request }) => {
+        try {
+            const data = await request.formData()
+            console.log(data)
+        }
+        catch (err) {
+            console.error("Error saving record:", err)
+        }
+    }
+}
+
 function parseRecord(input: string): WeeklyRecord[] {
     let res: WeeklyRecord[] = []
     let lines = input.split("\n")
