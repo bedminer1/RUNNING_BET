@@ -7,6 +7,7 @@
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
 
+	// calculateCutoff takes in Yoona's score and returns the score needed to beat her
 	function calculateCutoff(input: number|undefined): number {
 		let herScore: number = Number(input) ?? 0
 		if (herScore < 5) {
@@ -22,6 +23,7 @@
 </script>
 
 <div class="flex flex-col h-screen items-center justify-center">
+<!-- FORM -->
 	<form class="w-1/4 flex flex-col mb-5 justify-center items-center gap-3" action="?/saveRecord" method="POST">
 		<div class="flex flex-col w-full">
 			{#if $errors.myScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.myScore}</span>{/if}
@@ -41,6 +43,7 @@
 		<button class="btn border-dashed border-2 w-1/2 rounded-lg mt-4 border-wheat-500 text-wheat-500">Save Result</button>
 	</form>
 
+<!-- TABLE -->
 <div class="table-container w-1/2">
 	<table class="table table-hover">
 		<thead>
