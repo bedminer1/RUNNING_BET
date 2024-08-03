@@ -10,8 +10,15 @@ declare namespace App {
 
 interface WeeklyRecord {
 	weekID: number
-	myScore: number
-	herScore: number
-	neededScore: number
+	myScore?: number
+	herScore?: number
+	neededScore?: number
+	winForMe: boolean
+}
+
+interface RawWeeklyRecord {
+	myScore?: number
+	herScore?: number
+	neededScore?: number
 	winForMe: boolean
 }

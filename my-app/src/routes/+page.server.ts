@@ -33,6 +33,8 @@ export const load = async () => {
 
 export const actions = {
     saveRecord: async ({ request }) => {
+        const filePath = path.resolve("src/lib/record.txt")
+
         try {
             const form = await superValidate(request, zod(schema))
             // custom check for undefined since values must be intialized as undefined for placeholder to work
@@ -44,11 +46,22 @@ export const actions = {
                 form.valid = false
                 form.errors.herScore = ["*Please fill in field*"]
             }
-            console.log(form)
 
             if (!form.valid) {
                 return fail(400, { form });
             }
+
+            let newRecord = {
+                myScore: form.data.myScore,
+                herScore: form.data.herScore,
+                neededScore: form.data.neededScore,
+                winForMe: form.data.winForMe,
+            }
+            let oldTxt = fs.readFileSync(filePath, "utf-8")
+            let newTxt = javascriptToTxt(oldTxt, newRecord)
+            fs.writeFileSync(filePath, newTxt, 'utf-8')
+
+            // saving to file
         }
         catch (err) {
             console.error("Error saving record:", err)
@@ -73,4 +86,8 @@ function parseRecord(input: string): WeeklyRecord[] {
     }
 
     return res
+}
+
+function javascriptToTxt(oldTxt: string, record: RawWeeklyRecord): string {
+    return oldTxt + "\n" + `${record.myScore} ${record.herScore} ${record.neededScore} ${record.winForMe}` 
 }

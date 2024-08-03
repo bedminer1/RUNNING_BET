@@ -53,7 +53,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each data.records as record, i}
+			{#each [...data.records].reverse() as record, i}
 				<tr>
 					<td>{record.weekID}</td>
 					<td>{record.myScore}</td>
