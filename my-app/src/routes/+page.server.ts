@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { z } from 'zod'
-import { superValidate, message } from 'sveltekit-superforms'
+import { superValidate } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import { fail } from '@sveltejs/kit'
 
@@ -35,9 +35,14 @@ export const actions = {
     saveRecord: async ({ request }) => {
         try {
             const form = await superValidate(request, zod(schema))
-            if (form.data.myScore === undefined || form.data.herScore === undefined || form.data.neededScore === undefined) {
+            // custom check for undefined since values must be intialized as undefined for placeholder to work
+            if (form.data.myScore === undefined) {
                 form.valid = false
-                form.message = "Please fill in all fields"
+                form.errors.myScore = ["*Please fill in field*"]
+            }
+            if (form.data.herScore === undefined) {
+                form.valid = false
+                form.errors.herScore = ["*Please fill in field*"]
             }
             console.log(form)
 

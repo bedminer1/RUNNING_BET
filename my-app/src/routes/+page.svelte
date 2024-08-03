@@ -3,7 +3,7 @@
 
 	export let data
 
-	const { form, message } = superForm(data.form)
+	const { form, errors, message } = superForm(data.form)
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
 
@@ -22,15 +22,23 @@
 </script>
 
 <div class="flex flex-col h-screen items-center justify-center">
-	<form class="w-1/4 flex flex-col gap-3 mb-5" action="?/saveRecord" method="POST">
-		<input name="myScore" type="text" bind:value={$form.myScore} class="input" placeholder="Alex's score">
-		<input name="herScore" type="text" bind:value={$form.herScore} class="input" placeholder="윤아's score">
+	<form class="w-1/4 flex flex-col mb-5 justify-center items-center gap-3" action="?/saveRecord" method="POST">
+		<div class="flex flex-col w-full">
+			{#if $errors.myScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.myScore}</span>{/if}
+			<input name="myScore" type="text" bind:value={$form.myScore} class="input mt-0" placeholder="Alex's score">
+		</div>
+		
+		<div class="flex flex-col w-full">
+			{#if $errors.herScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.herScore}</span>{/if}
+			<input name="herScore" type="text" bind:value={$form.herScore} class="input mt-0" placeholder="윤아's score">
+		</div>
 		<input name="neededScore" type="text" bind:value={$form.neededScore} class="input" placeholder="Distance cutoff">
 		<input name="winForMe" type="hidden" bind:value={$form.winForMe}>
+
 		{#if $message} 
-			<p class="text-error-500">{$message}</p>
+			<p class="text-success-500">{$message}</p>
 		{/if}
-		<button class="btn">Save Result</button>
+		<button class="btn border-dashed border-2 w-1/2 rounded-lg mt-4 border-wheat-500 text-wheat-500">Save Result</button>
 	</form>
 
 <div class="table-container w-1/2">
@@ -51,7 +59,7 @@
 					<td>{record.myScore}</td>
 					<td>{record.herScore}</td>
 					<td>{record.neededScore}</td>
-					<td>{record.winForMe}</td>
+					<td>{record.winForMe ? "Alex" : "윤아"}</td>
 				</tr>
 			{/each}
 		</tbody>
