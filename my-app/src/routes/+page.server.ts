@@ -1,7 +1,19 @@
 import fs from "fs"
 import path from "path"
+import { z } from 'zod'
+import { superValidate, message } from 'sveltekit-superforms'
+import { zod } from 'sveltekit-superforms/adapters'
+import { fail } from '@sveltejs/kit'
+
+const schema = z.object({
+    myScore: z.number().optional(),
+    herScore: z.number().optional(),
+    neededScore: z.number().optional(),
+    winForMe: z.boolean()
+})
 
 export const load = async () => {
+    const form = await superValidate(zod(schema))
     const filePath = path.resolve("src/lib/record.txt")
     let rawInput = ""
     let records: WeeklyRecord[] = []
@@ -14,6 +26,7 @@ export const load = async () => {
     }
 
     return {
+        form,
         records
     }
 }
@@ -21,8 +34,16 @@ export const load = async () => {
 export const actions = {
     saveRecord: async ({ request }) => {
         try {
-            const data = await request.formData()
-            console.log(data)
+            const form = await superValidate(request, zod(schema))
+            if (form.data.myScore === undefined || form.data.herScore === undefined || form.data.neededScore === undefined) {
+                form.valid = false
+                form.message = "Please fill in all fields"
+            }
+            console.log(form)
+
+            if (!form.valid) {
+                return fail(400, { form });
+            }
         }
         catch (err) {
             console.error("Error saving record:", err)

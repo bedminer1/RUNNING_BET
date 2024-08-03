@@ -30,6 +30,8 @@
   },
   "type": "module",
   "dependencies": {
-    "@floating-ui/dom": "1.6.8"
+    "@floating-ui/dom": "1.6.8",
+    "sveltekit-superforms": "^2.16.1",
+    "zod": "^3.23.8"
   }
 }
