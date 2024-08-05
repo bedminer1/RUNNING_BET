@@ -76,11 +76,12 @@ function parseRecord(input: string): WeeklyRecord[] {
 
         let data = line.split(" ")
         let record: WeeklyRecord = {
-            weekID: lines.indexOf(line) + 1,
-            myScore: Number(data[0]),
-            herScore: Number(data[1]),
-            neededScore: Number(data[2]),
-            winForMe: data[3] === "true"
+            weekID:  Number(data[0]),
+            myScore: Number(data[1]),
+            herScore: Number(data[2]),
+            neededScore: Number(data[3]),
+            winForMe: data[4] === "true",
+            score: data[5]
         }
         res.push(record)
     }

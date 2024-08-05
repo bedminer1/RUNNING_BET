@@ -14,6 +14,7 @@ interface WeeklyRecord {
 	herScore?: number
 	neededScore?: number
 	winForMe: boolean
+	score: string
 }
 
 interface RawWeeklyRecord {

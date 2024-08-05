@@ -1,3 +1,4 @@
+import { fail } from "assert";
 import fs from "fs"
 import path from "path"
 
@@ -25,23 +26,26 @@ const resYoona = calculateScores(inputYoona)
 
 // returns an array of RawWeeklyRecord with the score at the end
 function parseRecords(alexScores: string[], yoonaScores: string[]) {
-    if (alexScores.length !== yoonaScores.length) return "Lengths are not equal"
+    if (alexScores.length !== yoonaScores.length) {
+      fail("Array lengths not equal")
+    }
     let res = []
     let alexScore = 0
     let yoonaScore = 0
 
     for (let i = 0; i < alexScores.length; i++) {
-        let newRecord: RawWeeklyRecord = {
-            myScore: Number(alexScores[i]),
-            herScore: Number(yoonaScores[i]),
-            neededScore: calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1),
-            winForMe: Number(alexScores[i]) > calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1)
-        }
-        if (Number(alexScores[i]) > Number(yoonaScores[i]) * 2) alexScore++
-        else yoonaScore++
-        res.push(newRecord)
+      if (Number(alexScores[i]) > calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1)) alexScore++
+      else yoonaScore++
+      let newRecord: WeeklyRecord = {
+          weekID: i + 1,
+          myScore: Number(alexScores[i]),
+          herScore: Number(yoonaScores[i]),
+          neededScore: calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1),
+          winForMe: Number(alexScores[i]) > calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1),
+          score: `${alexScore}-${yoonaScore}`
+      }
+      res.push(newRecord)
     }
-    res.push(`SCORE: ${alexScore} - ${yoonaScore}`)
     
     return res
 }
@@ -78,4 +82,16 @@ function calculateCurrentCutoff(input: number|undefined): number {
 }
 
 let records = parseRecords(resAlex, resYoona)
-console.log(records, "hw")
+console.log(records)
+
+function arrayToString(records: WeeklyRecord[]) {
+  let res = ""
+  for (let record of records) {
+    res += `${record.weekID} ${record.myScore} ${record.herScore} ${record.neededScore} ${record.winForMe} ${record.score}\n`
+  }
+  return res
+}
+
+let outputTxt = arrayToString(records)
+const outputFilePath = path.resolve("src/lib/autoTallyOutput.txt")
+fs.writeFileSync(outputFilePath, outputTxt, 'utf-8')

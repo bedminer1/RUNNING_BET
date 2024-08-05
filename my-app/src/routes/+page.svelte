@@ -53,6 +53,7 @@
 				<th>Yoona's Score</th>
 				<th>Needed Score</th>
 				<th>Who won?</th>
+				<th>Score</th>
 			</tr>
 		</thead>
 		<tbody>
@@ -63,6 +64,7 @@
 					<td>{record.herScore}</td>
 					<td>{record.neededScore}</td>
 					<td>{record.winForMe ? "Alex" : "윤아"}</td>
+					<td>{record.score}</td>
 				</tr>
 			{/each}
 		</tbody>
