@@ -1,11 +1,25 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms'
+	import { Paginator } from '@skeletonlabs/skeleton'
 
 	export let data
 
 	const { form, errors, message } = superForm(data.form)
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
+
+	// paginator logic
+	const source = [...data.records].reverse()
+	let paginationSettings = {
+		page: 0,
+		limit: 5,
+		size: source.length,
+		amounts: [5,10,30],
+	}
+	$: paginatedSource = source.slice(
+		paginationSettings.page * paginationSettings.limit,
+		paginationSettings.page * paginationSettings.limit + paginationSettings.limit
+	)
 
 	// calculateCutoff takes in Yoona's score and returns the score needed to beat her
 	function calculateCutoff(input: number|undefined): number {
@@ -45,7 +59,7 @@
 
 <!-- TABLE -->
 <div class="table-container w-1/2">
-	<table class="table table-hover">
+	<table class="table table-hover mb-4">
 		<thead>
 			<tr>
 				<th>week</th>
@@ -57,7 +71,7 @@
 			</tr>
 		</thead>
 		<tbody>
-			{#each [...data.records].reverse() as record, i}
+			{#each paginatedSource as record, i}
 				<tr>
 					<td>{record.weekID}</td>
 					<td>{record.myScore}</td>
@@ -69,6 +83,12 @@
 			{/each}
 		</tbody>
 	</table>
+	<Paginator
+		bind:settings={paginationSettings}
+		showFirstLastButtons="{false}"
+		showPreviousNextButtons="{true}"
+		amountText="Records"
+	/>
 </div>
 
 </div>
