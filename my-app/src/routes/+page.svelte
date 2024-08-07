@@ -1,12 +1,36 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms'
-	import { Paginator } from '@skeletonlabs/skeleton'
+	import { Paginator, getToastStore } from '@skeletonlabs/skeleton'
 
 	export let data
 
-	const { form, errors, message } = superForm(data.form)
+	const { form, errors, message, enhance } = superForm(data.form)
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
+	// toasts logic
+	const toastScore = getToastStore()
+	const successToast = {
+		message: "Saved 👍🏻",
+		hideDismiss: true,
+		timeout: 1000,
+		hoverable: true,
+		background: "variant-filled-success",
+		classes: "border-md"
+	}
+	const errorToast = {
+		message: "Failed to Save :(",
+		hideDismiss: true,
+		timeout: 1000,
+		hoverable: true,
+		background: "variant-filled-error",
+		classes: "border-md"
+	}
+
+	$: if ($errors.myScore && $errors.herScore) {
+		toastScore.trigger(errorToast)
+	} else if ($message === "Success") {
+		toastScore.trigger(successToast)
+	}
 
 	// paginator logic
 	const source = [...data.records].reverse()
@@ -38,7 +62,7 @@
 
 <div class="flex flex-col h-screen items-center justify-center">
 <!-- FORM -->
-	<form class="w-1/4 flex flex-col mb-10 justify-center items-center gap-3" action="?/saveRecord" method="POST">
+	<form class="w-1/4 flex flex-col mb-10 justify-center items-center gap-3" action="?/saveRecord" method="POST" use:enhance>
 		<div class="flex flex-col w-full">
 			{#if $errors.myScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.myScore}</span>{/if}
 			<input name="myScore" type="text" bind:value={$form.myScore} class="input mt-0" placeholder="Alex's score">
@@ -50,10 +74,6 @@
 		</div>
 		<input name="neededScore" type="text" bind:value={$form.neededScore} class="input" placeholder="Distance cutoff">
 		<input name="winForMe" type="hidden" bind:value={$form.winForMe}>
-
-		{#if $message} 
-			<p class="text-success-500">{$message}</p>
-		{/if}
 		<button class="btn variant-ghost-primary w-1/2 rounded-md mt-4 text-wheat-500">Save Result</button>
 	</form>
 

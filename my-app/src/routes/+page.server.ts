@@ -1,7 +1,7 @@
 import fs from "fs"
 import path from "path"
 import { z } from 'zod'
-import { superValidate } from 'sveltekit-superforms'
+import { superValidate, message } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import { fail } from '@sveltejs/kit'
 
@@ -57,11 +57,14 @@ export const actions = {
                 neededScore: form.data.neededScore,
                 winForMe: form.data.winForMe,
             }
+
+            // saving to file
             let oldTxt = fs.readFileSync(filePath, "utf-8")
             let newTxt = javascriptToTxt(oldTxt, newRecord)
             fs.writeFileSync(filePath, newTxt, 'utf-8')
 
-            // saving to file
+            return message(form, "Success")
+
         }
         catch (err) {
             console.error("Error saving record:", err)
