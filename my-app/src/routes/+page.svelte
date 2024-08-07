@@ -38,7 +38,7 @@
 
 <div class="flex flex-col h-screen items-center justify-center">
 <!-- FORM -->
-	<form class="w-1/4 flex flex-col mb-5 justify-center items-center gap-3" action="?/saveRecord" method="POST">
+	<form class="w-1/4 flex flex-col mb-10 justify-center items-center gap-3" action="?/saveRecord" method="POST">
 		<div class="flex flex-col w-full">
 			{#if $errors.myScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.myScore}</span>{/if}
 			<input name="myScore" type="text" bind:value={$form.myScore} class="input mt-0" placeholder="Alex's score">
@@ -54,7 +54,7 @@
 		{#if $message} 
 			<p class="text-success-500">{$message}</p>
 		{/if}
-		<button class="btn border-dashed border-2 w-1/2 rounded-lg mt-4 border-wheat-500 text-wheat-500">Save Result</button>
+		<button class="btn variant-ghost-primary w-1/2 rounded-md mt-4 text-wheat-500">Save Result</button>
 	</form>
 
 <!-- TABLE -->
@@ -73,12 +73,12 @@
 		<tbody>
 			{#each paginatedSource as record, i}
 				<tr>
-					<td>{record.weekID}</td>
-					<td>{record.myScore}</td>
-					<td>{record.herScore}</td>
-					<td>{record.neededScore}</td>
-					<td>{record.winForMe ? "Alex" : "윤아"}</td>
-					<td>{record.score}</td>
+					<td class="text-center">{record.weekID}</td>
+					<td class="text-center">{record.myScore}</td>
+					<td class="text-center">{record.herScore}</td>
+					<td class="text-center">{record.neededScore}</td>
+					<td class="text-center">{record.winForMe ? "Alex" : "윤아"}</td>
+					<td class="text-center">{record.score}</td>
 				</tr>
 			{/each}
 		</tbody>
