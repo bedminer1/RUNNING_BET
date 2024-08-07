@@ -4,9 +4,19 @@
 
 	export let data
 
-	const { form, errors, message, enhance } = superForm(data.form)
+	const { form, errors, message } = superForm(data.form)
+
+	let latestScore = data.records.at(-1)!.score
+	let latestScoreSplit = latestScore.split("-")
+	$form.weekID = data.records.length + 1
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
+	$: if ($form.winForMe) {
+		$form.score = `${Number(latestScoreSplit[0]) + 1}-${latestScoreSplit[1]}`
+		console.log($form.score)
+	} else {
+		$form.score = `${latestScoreSplit[0]}-${Number(latestScoreSplit[1]) + 1}`
+	}
 	// toasts logic
 	const toastScore = getToastStore()
 	const successToast = {
@@ -62,7 +72,7 @@
 
 <div class="flex flex-col h-screen items-center justify-center">
 <!-- FORM -->
-	<form class="w-1/4 flex flex-col mb-10 justify-center items-center gap-3" action="?/saveRecord" method="POST" use:enhance>
+	<form class="w-1/4 flex flex-col mb-10 justify-center items-center gap-3" action="?/saveRecord" method="POST">
 		<div class="flex flex-col w-full">
 			{#if $errors.myScore}<span class="invalid italic m-0 p-0 text-xs text-error-400 ml-2 w-full">{$errors.myScore}</span>{/if}
 			<input name="myScore" type="text" bind:value={$form.myScore} class="input mt-0" placeholder="Alex's score">
@@ -73,6 +83,8 @@
 			<input name="herScore" type="text" bind:value={$form.herScore} class="input mt-0" placeholder="윤아's score">
 		</div>
 		<input name="neededScore" type="text" bind:value={$form.neededScore} class="input" placeholder="Distance cutoff">
+		<input name="weekID" type="hidden" bind:value={$form.weekID}>
+		<input name="score" type="hidden" bind:value={$form.score}>
 		<input name="winForMe" type="hidden" bind:value={$form.winForMe}>
 		<button class="btn variant-ghost-primary w-1/2 rounded-md mt-4 text-wheat-500">Save Result</button>
 	</form>
@@ -94,9 +106,9 @@
 			{#each paginatedSource as record, i}
 				<tr>
 					<td class="text-center">{record.weekID}</td>
-					<td class="text-center">{record.myScore}</td>
-					<td class="text-center">{record.herScore}</td>
-					<td class="text-center">{record.neededScore}</td>
+					<td class="text-center">{record.myScore?.toFixed(2)}</td>
+					<td class="text-center">{record.herScore?.toFixed(2)}</td>
+					<td class="text-center">{record.neededScore?.toFixed(2)}</td>
 					<td class="text-center">{record.winForMe ? "Alex" : "윤아"}</td>
 					<td class="text-center">{record.score}</td>
 				</tr>

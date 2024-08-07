@@ -6,10 +6,12 @@ import { zod } from 'sveltekit-superforms/adapters'
 import { fail } from '@sveltejs/kit'
 
 const schema = z.object({
+    weekID: z.number(),
     myScore: z.number().optional(),
     herScore: z.number().optional(),
     neededScore: z.number().optional(),
-    winForMe: z.boolean()
+    winForMe: z.boolean(),
+    score: z.string()
 })
 
 export const load = async () => {
@@ -51,11 +53,13 @@ export const actions = {
                 return fail(400, { form });
             }
 
-            let newRecord = {
+            let newRecord: WeeklyRecord = {
+                weekID: form.data.weekID,
                 myScore: form.data.myScore,
                 herScore: form.data.herScore,
                 neededScore: form.data.neededScore,
                 winForMe: form.data.winForMe,
+                score: form.data.score
             }
 
             // saving to file
@@ -92,6 +96,6 @@ function parseRecord(input: string): WeeklyRecord[] {
     return res
 }
 
-function javascriptToTxt(oldTxt: string, record: RawWeeklyRecord): string {
-    return oldTxt + "\n" + `${record.myScore} ${record.herScore} ${record.neededScore} ${record.winForMe}` 
+function javascriptToTxt(oldTxt: string, record: WeeklyRecord): string {
+    return oldTxt + "\n" + `${record.weekID} ${record.myScore?.toFixed(2)} ${record.herScore?.toFixed(2)} ${record.neededScore} ${record.winForMe} ${record.score}` 
 }
