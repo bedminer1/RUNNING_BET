@@ -5,3 +5,4 @@ TODO:
 - toasts for success and error messages
 - port to pocketbase so it doesnt rely on local storage
 - graph
+- incorporate dayjs to add dates and timelines
