@@ -4,6 +4,8 @@ import { z } from 'zod'
 import { superValidate, message } from 'sveltekit-superforms'
 import { zod } from 'sveltekit-superforms/adapters'
 import { fail } from '@sveltejs/kit'
+import PocketBase from 'pocketbase'
+import { SECRET_PASSWORD, SECRET_EMAIL, SECRET_URL } from '$env/static/private'
 
 const schema = z.object({
     weekID: z.number(),
@@ -61,6 +63,11 @@ export const actions = {
                 winForMe: form.data.winForMe,
                 score: form.data.score
             }
+
+            // saving to PB
+            const pb = new PocketBase(SECRET_URL)
+		    await pb.admins.authWithPassword(SECRET_EMAIL, SECRET_PASSWORD)
+            const record = await pb.collection('RUNNING').create(newRecord)
 
             // saving to file
             let oldTxt = fs.readFileSync(filePath, "utf-8")

@@ -1,6 +1,8 @@
 import { fail } from "assert";
 import fs from "fs"
 import path from "path"
+import PocketBase from 'pocketbase'
+import { SECRET_PASSWORD, SECRET_EMAIL, SECRET_URL } from '$env/static/private'
 
 // takes in raw scores from txt and return arr of numbers containing scores for each week
 function calculateScores(input: string) {
@@ -24,10 +26,16 @@ const inputYoona = fs.readFileSync(filePathYoona, "utf-8")
 const resAlex = calculateScores(inputAlex)
 const resYoona = calculateScores(inputYoona)
 
-// returns an array of RawWeeklyRecord with the score at the end
+const saveToPB = async (newRecord: WeeklyRecord) => {
+  const pb = new PocketBase(SECRET_URL)
+  await pb.admins.authWithPassword(SECRET_EMAIL, SECRET_PASSWORD)
+  const record = await pb.collection('RUNNING').create(newRecord)
+}
+// returns an array of WeeklyRecord with the score at the end
 function parseRecords(alexScores: string[], yoonaScores: string[]) {
+  try {
     if (alexScores.length !== yoonaScores.length) {
-      fail("Array lengths not equal")
+      throw new Error("Array lengths not equal")
     }
     let res = []
     let alexScore = 0
@@ -45,9 +53,14 @@ function parseRecords(alexScores: string[], yoonaScores: string[]) {
           score: `${alexScore}-${yoonaScore}`
       }
       res.push(newRecord)
+      // uncomment to save to PB
+      // saveToPB(newRecord)
     }
     
     return res
+  } catch (err) {
+    return []
+  }
 }
 
 // returns different cutoffs depending on the multiplier scheme at the time
