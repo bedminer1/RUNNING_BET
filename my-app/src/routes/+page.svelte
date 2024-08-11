@@ -10,9 +10,11 @@
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
 	$: if ($form.winForMe) {
-		$form.myPoints = $form.myPoints + 1
+		$form.myPoints = data.records.at(-1)!.myPoints + 1
+		$form.herPoints = data.records.at(-1)!.herPoints
 	} else {
-		$form.herPoints = $form.herPoints + 1
+		$form.myPoints = data.records.at(-1)!.myPoints
+		$form.herPoints = data.records.at(-1)!.herPoints + 1
 	}
 	// toasts logic
 	const toastScore = getToastStore()

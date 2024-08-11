@@ -62,8 +62,8 @@ export const actions = {
                 herScore: form.data.herScore,
                 neededScore: form.data.neededScore,
                 winForMe: form.data.winForMe,
-                myPoints: form.data.neededScore ? form.data.myPoints + 1 : form.data.myPoints,
-                herPoints: form.data.neededScore ? form.data.herPoints : form.data.herPoints + 1
+                myPoints: form.data.myPoints,
+                herPoints: form.data.herPoints
             }
 
             // saving to PB
