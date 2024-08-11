@@ -13,7 +13,8 @@ const schema = z.object({
     herScore: z.number().optional(),
     neededScore: z.number().optional(),
     winForMe: z.boolean(),
-    score: z.string()
+    myPoints: z.number(),
+    herPoints: z.number()
 })
 
 export const load = async () => {
@@ -61,7 +62,8 @@ export const actions = {
                 herScore: form.data.herScore,
                 neededScore: form.data.neededScore,
                 winForMe: form.data.winForMe,
-                score: form.data.score
+                myPoints: form.data.neededScore ? form.data.myPoints + 1 : form.data.myPoints,
+                herPoints: form.data.neededScore ? form.data.herPoints : form.data.herPoints + 1
             }
 
             // saving to PB
@@ -95,7 +97,8 @@ function parseRecord(input: string): WeeklyRecord[] {
             herScore: Number(data[2]),
             neededScore: Number(data[3]),
             winForMe: data[4] === "true",
-            score: data[5]
+            myPoints: Number(data[5]),
+            herPoints: Number(data[6])
         }
         res.push(record)
     }
@@ -104,5 +107,5 @@ function parseRecord(input: string): WeeklyRecord[] {
 }
 
 function javascriptToTxt(oldTxt: string, record: WeeklyRecord): string {
-    return oldTxt + "\n" + `${record.weekID} ${record.myScore?.toFixed(2)} ${record.herScore?.toFixed(2)} ${record.neededScore} ${record.winForMe} ${record.score}` 
+    return oldTxt + "\n" + `${record.weekID} ${record.myScore?.toFixed(2)} ${record.herScore?.toFixed(2)} ${record.neededScore} ${record.winForMe} ${record.myPoints} ${record.herPoints}` 
 }

@@ -12,11 +12,13 @@ declare namespace App {
 
 interface WeeklyRecord {
 	weekID: number
-	myScore?: number
+	// put these 3 as optional so that placeholder in form fields can show up
+	myScore?: number 
 	herScore?: number
 	neededScore?: number
 	winForMe: boolean
-	score: string
+	myPoints: number
+	herPoints: number
 }
 
 interface RawWeeklyRecord {

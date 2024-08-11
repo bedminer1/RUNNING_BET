@@ -50,7 +50,8 @@ function parseRecords(alexScores: string[], yoonaScores: string[]) {
           herScore: Number(yoonaScores[i]),
           neededScore: calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1),
           winForMe: Number(alexScores[i]) > calculateDifferentCutoffs(Number(yoonaScores[i]), i + 1),
-          score: `${alexScore}-${yoonaScore}`
+          myPoints: alexScore,
+          herPoints: yoonaScore
       }
       res.push(newRecord)
       // uncomment to save to PB
@@ -100,7 +101,7 @@ console.log(records)
 function arrayToString(records: WeeklyRecord[]) {
   let res = ""
   for (let record of records) {
-    res += `${record.weekID} ${record.myScore} ${record.herScore} ${record.neededScore} ${record.winForMe} ${record.score}\n`
+    res += `${record.weekID} ${record.myScore} ${record.herScore} ${record.neededScore} ${record.winForMe} ${record.myPoints} ${record.herPoints}\n`
   }
   return res
 }

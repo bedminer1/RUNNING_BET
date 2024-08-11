@@ -6,16 +6,13 @@
 
 	const { form, errors, message } = superForm(data.form)
 
-	let latestScore = data.records.at(-1)!.score
-	let latestScoreSplit = latestScore.split("-")
 	$form.weekID = data.records.length + 1
 	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(calculateCutoff($form.herScore).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
 	$: if ($form.winForMe) {
-		$form.score = `${Number(latestScoreSplit[0]) + 1}-${latestScoreSplit[1]}`
-		console.log($form.score)
+		$form.myPoints = $form.myPoints + 1
 	} else {
-		$form.score = `${latestScoreSplit[0]}-${Number(latestScoreSplit[1]) + 1}`
+		$form.herPoints = $form.herPoints + 1
 	}
 	// toasts logic
 	const toastScore = getToastStore()
@@ -84,7 +81,8 @@
 		</div>
 		<input name="neededScore" type="text" bind:value={$form.neededScore} class="input" placeholder="Distance cutoff">
 		<input name="weekID" type="hidden" bind:value={$form.weekID}>
-		<input name="score" type="hidden" bind:value={$form.score}>
+		<input name="myPoints" type="hidden" bind:value={$form.myPoints}>
+		<input name="herPoints" type="hidden" bind:value={$form.herPoints}>
 		<input name="winForMe" type="hidden" bind:value={$form.winForMe}>
 		<button class="btn variant-ghost-primary w-1/2 rounded-md mt-4 text-wheat-500">Save Result</button>
 	</form>
@@ -110,7 +108,7 @@
 					<td class="text-center">{record.herScore?.toFixed(2)}</td>
 					<td class="text-center">{record.neededScore?.toFixed(2)}</td>
 					<td class="text-center">{record.winForMe ? "Alex" : "윤아"}</td>
-					<td class="text-center">{record.score}</td>
+					<td class="text-center">{record.myPoints}-{record.herPoints}</td>
 				</tr>
 			{/each}
 		</tbody>
