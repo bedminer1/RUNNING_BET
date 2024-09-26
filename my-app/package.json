@@ -26,13 +26,16 @@
     "vite-plugin-tailwind-purgecss": "0.3.3",
     "@tailwindcss/typography": "0.5.13",
     "@tailwindcss/forms": "0.5.7",
-    "@types/node": "20.14.11"
+    "@types/node": "20.14.11",
+    "@types/bun": "latest"
   },
   "type": "module",
   "dependencies": {
     "@floating-ui/dom": "1.6.8",
+    "bun": "^1.1.29",
     "pocketbase": "^0.21.4",
     "sveltekit-superforms": "^2.16.1",
     "zod": "^3.23.8"
-  }
+  },
+  "module": "index.ts"
 }

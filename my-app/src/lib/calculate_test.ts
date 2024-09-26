@@ -1,26 +1,5 @@
-// CalculateCutoff takes in the scheme and score and calculate the score I would need to win
-export function CalculateCutoff(herScore: number, scheme: number[][]): number {
-    let res = 0
-
-    // go through all the schemes 
-    for (let i = 0; i < scheme.length; i++) {
-        const [dist, mult] = scheme[i]
-        const prevDist = i > 0 ? scheme[i-1][0] : 0
-        const range = dist - prevDist
-        // in the case where herScore is less than scheme's total coverage
-        if (herScore <= range) {
-            res += herScore * mult
-            return res
-        }
-        
-        res += range * mult
-        herScore -= range
-    }
-
-    // if there is leftover just add with 1x multiplier
-    res += herScore
-    return res
-}
+import { CalculateCutoff } from "./calculate"
+import { expect, test } from "bun:test"
 
 // FOR TESTING
 interface testCase {
@@ -73,25 +52,10 @@ function testCalculateCutoff(verbose: boolean) {
     let testsPassed = 0
     for (let tc of testCases) {
         let res = CalculateCutoff(tc.herScore, tc.scheme)
-        let testPassed = tc.expRes === res
-
-        // if not verbose skip
-        if (!verbose) {
-            if (testPassed) testsPassed++
-            continue
-        }
-
-        // if verbose, log it out
-        console.log("Test:", tc.name)
-        if (tc.expRes === res) {
-            console.log("Test Status: Passed")
-            continue
-        }
-        console.log("Test Status: Failed")
-        console.log("Expected:", tc.expRes, "Output:", res)
+        test(tc.name, () => {
+            expect(res).toBe(tc.expRes)
+        })
     }
-
-    console.log(testsPassed, "/", testCases.length, "tests passed")
 }
 
 testCalculateCutoff(false) // verbose = false
