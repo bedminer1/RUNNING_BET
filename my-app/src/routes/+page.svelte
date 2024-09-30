@@ -8,7 +8,7 @@
 	const { form, errors, message } = superForm(data.form)
 
 	$form.weekID = data.records.length + 1
-	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(CalculateCutoff($form.herScore, [[5,2], [10,1.5]]).toFixed(2))
+	$: $form.neededScore = $form.herScore === undefined ? undefined : Number(CalculateCutoff($form.herScore, scheme).toFixed(2))
 	$: $form.winForMe = $form.myScore! > $form.neededScore!
 	$: if ($form.winForMe) {
 		$form.myPoints = data.records.at(-1)!.myPoints + 1
@@ -61,9 +61,11 @@
 	let distance: string
 	let multiplier: string
 
-	function addInterval(distance: string, multiplier: string) {
-		scheme = [...scheme, [Number(distance), Number(multiplier)]]
+	function addInterval(d: string, m: string) {
+		scheme = [...scheme, [Number(d), Number(m)]]
 		scheme.sort((a,b) => a[0] - b[0])
+		distance = ""
+		multiplier = ""
 	}
 
 	function deleteInterval() {
