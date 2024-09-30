@@ -1,5 +1,7 @@
 package api
 
+import "os"
+
 type Record struct {
 	weekID      int
 	myScore     float32
@@ -12,33 +14,6 @@ type Record struct {
 }
 
 type Records []Record
-
-func calculateScore(herScore float32, scheme [][]float32) float32 {
-	var res float32 = 0
-
-	for i := range scheme {
-		dist := scheme[i][0]
-		mult := scheme[i][1]
-		var prevDist float32
-
-		if i > 0 {
-			prevDist = scheme[i-1][0]
-		} else {
-			prevDist = 0
-		}
-		span := dist - prevDist
-		if herScore <= span {
-			res += herScore * mult
-			return res
-		}
-
-		res += span * mult
-		herScore -= span
-	}
-
-	res += herScore
-	return res
-}
 
 func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	neededScore := calculateScore(herScore, scheme)
@@ -63,5 +38,22 @@ func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 		scheme: scheme,
 	}
 	*db = append(*db, r)
+	return nil
+}
+
+func (db *Record) Get(fileName string) error {
+	f, err := os.ReadFile(fileName)
+	if err != nil {
+		return err
+	}
+	
+	*db, err = parseTxt(f)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (db *Record) Save(fileName string) error {
 	return nil
 }
