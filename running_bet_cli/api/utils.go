@@ -1,6 +1,7 @@
 package api
 
 import (
+	"encoding/json"
 	"strconv"
 	"strings"
 )
@@ -75,6 +76,15 @@ func parseTxt(data []byte) (Records, error) {
 			HerPoints:   herPoints,
 		}
 		res = append(res, r)
+	}
+
+	return res, nil
+}
+
+func parseJSON(data []byte) (Records, error) {
+	res := Records{}
+	if err := json.Unmarshal(data, &res); err != nil {
+		return nil, err
 	}
 
 	return res, nil
