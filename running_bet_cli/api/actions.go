@@ -1,6 +1,9 @@
 package api
 
-import "os"
+import (
+	"fmt"
+	"os"
+)
 
 type Record struct {
 	weekID      int
@@ -41,13 +44,18 @@ func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	return nil
 }
 
-func (db *Record) Get(fileName string) error {
+func (db *Records) Get(fileName, fileType string) error {
 	f, err := os.ReadFile(fileName)
 	if err != nil {
 		return err
 	}
 	
-	*db, err = parseTxt(f)
+	switch fileType {
+	case "txt":
+		*db, err = parseTxt(f)
+	default:
+		return fmt.Errorf("fileType not supported")
+	}
 	if err != nil {
 		return err
 	}
