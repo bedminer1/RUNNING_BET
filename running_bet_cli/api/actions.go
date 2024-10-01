@@ -70,7 +70,7 @@ func (db *Records) Get(fileDirectory, fileName, fileType string) error {
 
 func (db *Records) Save(fileDirectory, fileName string) error {
 	filePath := fmt.Sprintf("%s%s.json",fileDirectory, fileName)
-	js, err := json.MarshalIndent(db, "", "\t")
+	js, err := json.Marshal(db)
 	if err != nil {
 		return err
 	}

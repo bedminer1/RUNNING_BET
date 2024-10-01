@@ -75,27 +75,18 @@ func TestAdd(t *testing.T) {
 			// Get the last entry in db (the one just added)
 			res := (*db)[len(*db)-1]
 
-			// Compare WeekID
 			if res.WeekID != tc.expRes.WeekID {
 				t.Errorf("WeekID mismatch: expected %d, got %d", tc.expRes.WeekID, res.WeekID)
 			}
-
-			// Compare NeededScore
 			if res.NeededScore != tc.expRes.NeededScore {
 				t.Errorf("NeededScore mismatch: expected %.2f, got %.2f", tc.expRes.NeededScore, res.NeededScore)
 			}
-
-			// Compare WinForMe
 			if res.WinForMe != tc.expRes.WinForMe {
 				t.Errorf("WinForMe mismatch: expected %t, got %t", tc.expRes.WinForMe, res.WinForMe)
 			}
-
-			// Compare MyPoints
 			if res.MyPoints != tc.expRes.MyPoints {
 				t.Errorf("MyPoints mismatch: expected %d, got %d", tc.expRes.MyPoints, res.MyPoints)
 			}
-
-			// Compare HerPoints
 			if res.HerPoints != tc.expRes.HerPoints {
 				t.Errorf("HerPoints mismatch: expected %d, got %d", tc.expRes.HerPoints, res.HerPoints)
 			}
