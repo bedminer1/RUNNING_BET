@@ -6,22 +6,22 @@ import (
 )
 
 type Record struct {
-	weekID      int
-	myScore     float32
-	herScore    float32
-	neededScore float32
-	winForMe    bool
-	myPoints    int
-	herPoints   int
-	scheme      [][]float32
+	WeekID      int
+	MyScore     float32
+	HerScore    float32
+	NeededScore float32
+	WinForMe    bool
+	MyPoints    int
+	HerPoints   int
+	Scheme      [][]float32
 }
 
 type Records []Record
 
 func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	neededScore := calculateScore(herScore, scheme)
-	myPoints := (*db)[len(*db)-1].myPoints + 1
-	herPoints := (*db)[len(*db)-1].herPoints + 1
+	myPoints := (*db)[len(*db)-1].MyPoints + 1
+	herPoints := (*db)[len(*db)-1].HerPoints + 1
 
 
 	if myScore > neededScore {
@@ -31,21 +31,22 @@ func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	}
 	
 	r := Record{
-		weekID: len(*db),
-		myScore: myScore,
-		herScore: herScore,
-		neededScore: neededScore,
-		winForMe: myScore > neededScore,
-		myPoints: myPoints,
-		herPoints: herPoints,
-		scheme: scheme,
+		WeekID: len(*db),
+		MyScore: myScore,
+		HerScore: herScore,
+		NeededScore: neededScore,
+		WinForMe: myScore > neededScore,
+		MyPoints: myPoints,
+		HerPoints: herPoints,
+		Scheme: scheme,
 	}
 	*db = append(*db, r)
 	return nil
 }
 
-func (db *Records) Get(fileName, fileType string) error {
-	f, err := os.ReadFile(fileName)
+func (db *Records) Get(fileDirectory, fileName, fileType string) error {
+	filePath := fmt.Sprint(fileDirectory, fileName, ".", fileType)
+	f, err := os.ReadFile(filePath)
 	if err != nil {
 		return err
 	}
@@ -62,6 +63,6 @@ func (db *Records) Get(fileName, fileType string) error {
 	return nil
 }
 
-func (db *Record) Save(fileName string) error {
+func (db *Records) Save(fileName string) error {
 	return nil
 }

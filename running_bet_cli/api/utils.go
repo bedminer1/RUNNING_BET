@@ -66,13 +66,13 @@ func parseTxt(data []byte) (Records, error) {
 		}
 
 		r := Record{
-			weekID:      weekID,
-			myScore:     float32(myScore),
-			herScore:    float32(herScore),
-			neededScore: float32(neededScore),
-			winForMe:    winForMe,
-			myPoints:    myPoints,
-			herPoints:   herPoints,
+			WeekID:      weekID,
+			MyScore:     float32(myScore),
+			HerScore:    float32(herScore),
+			NeededScore: float32(neededScore),
+			WinForMe:    winForMe,
+			MyPoints:    myPoints,
+			HerPoints:   herPoints,
 		}
 		res = append(res, r)
 	}
