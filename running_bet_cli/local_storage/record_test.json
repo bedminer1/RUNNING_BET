@@ -1,0 +1,17 @@
+[
+	{
+		"weekID": 1,
+		"my_score": 36.85,
+		"her_score": 9.07,
+		"needed_score": 18.14,
+		"win_for_me": true,
+		"my_points": 1,
+		"her_points": 0,
+		"scheme": [
+			[
+				1000,
+				2
+			]
+		]
+	}
+]
