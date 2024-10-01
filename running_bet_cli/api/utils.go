@@ -33,6 +33,7 @@ func calculateScore(herScore float32, scheme [][]float32) float32 {
 	return res
 }
 
+// incomplete because txt files previously didnt store scheme of a record
 func parseTxt(data []byte) (Records, error) {
 	res := Records{}
 	lines := strings.Split(string(data), "\n")

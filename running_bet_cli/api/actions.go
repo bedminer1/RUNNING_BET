@@ -21,8 +21,11 @@ type Records []Record
 
 func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	neededScore := calculateScore(herScore, scheme)
-	myPoints := (*db)[len(*db)-1].MyPoints + 1
-	herPoints := (*db)[len(*db)-1].HerPoints + 1
+	var myPoints, herPoints int
+	if len(*db) > 0 {
+		myPoints = (*db)[len(*db)-1].MyPoints
+		herPoints = (*db)[len(*db)-1].HerPoints
+	}
 
 	if myScore > neededScore {
 		myPoints++
@@ -31,7 +34,7 @@ func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 	}
 
 	r := Record{
-		WeekID:      len(*db),
+		WeekID:      len(*db)+1,
 		MyScore:     myScore,
 		HerScore:    herScore,
 		NeededScore: neededScore,
