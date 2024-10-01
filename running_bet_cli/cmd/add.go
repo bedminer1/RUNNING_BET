@@ -41,7 +41,7 @@ func addAction(out io.Writer, file string, myScore, herScore float32) error {
 		return err
 	}
 
-	if err := db.Add(myScore, herScore, [][]float32{}); err != nil {
+	if err := db.Add(myScore, herScore, [][]float32{{5,2},{10,1.5}}); err != nil {
 		return err
 	}
 
