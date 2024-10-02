@@ -102,8 +102,9 @@ func TestGetTxt(t *testing.T) {
 
 	db := &api.Records{}
 	fileDirectory := "../local_storage/"
-	fileName := "record_test"
+	fileName := "record"
 	fileType := "txt"
+
 	if err := db.Get(fileDirectory, fileName, fileType); err != nil {
 		t.Errorf("Unexpected error: %q", err)
 	}
@@ -126,8 +127,9 @@ func TestGetJSON(t *testing.T) {
 
 	db := &api.Records{}
 	fileDirectory := "../local_storage/"
-	fileName := "record_test"
+	fileName := "record"
 	fileType := "json"
+
 	if err := db.Get(fileDirectory, fileName, fileType); err != nil {
 		t.Errorf("Unexpected error: %q", err)
 	}

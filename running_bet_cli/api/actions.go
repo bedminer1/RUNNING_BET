@@ -7,15 +7,16 @@ import (
 )
 
 type Record struct {
-	WeekID      int         `json:"weekID"`
-	MyScore     float32     `json:"my_score"`
-	HerScore    float32     `json:"her_score"`
-	NeededScore float32     `json:"needed_score"`
-	WinForMe    bool        `json:"win_for_me"`
-	MyPoints    int         `json:"my_points"`
-	HerPoints   int         `json:"her_points"`
-	Scheme      [][]float32 `json:"scheme"`
+	WeekID      int         `json:"weekID" db:"weekid"`
+	MyScore     float32     `json:"my_score" db:"myscore"`
+	HerScore    float32     `json:"her_score" db:"herscore"`
+	NeededScore float32     `json:"needed_score" db:"neededscore"`
+	WinForMe    bool        `json:"win_for_me" db:"winforme"`
+	MyPoints    int         `json:"my_points" db:"mypoints"`
+	HerPoints   int         `json:"her_points" db:"herpoints"`
+	Scheme      [][]float32 `json:"scheme" db:"scheme"`
 }
+
 
 type Records []Record
 

@@ -98,7 +98,7 @@ func parseJSON(data []byte) (Records, error) {
 
 // saving to SQLITE
 const (
-	createTable string = `CREATE TABLE records (
+	createTable string = `CREATE TABLE IF NOT EXISTS records (
 WeekID INTEGER PRIMARY KEY,
 MyScore REAL,
 HerScore REAL,
@@ -145,8 +145,8 @@ func (repo *dbRepo) Upsert(record Record) error {
 
 	if exists {
 		_, err := repo.db.Exec(`
-			UPDATE records SET my_score=?, her_score=?, needed_score=?, win_for_me=?, my_points=?, her_points=?, scheme=?
-			WHERE weekID=?`,
+			UPDATE records SET MyScore=ROUND(?, 2), HerScore=ROUND(?, 2), NeededScore=ROUND(?, 2), WinForMe=?, MyPoints=?, HerPoints=?, Scheme=?
+			WHERE WeekID=?`,
 			record.MyScore, record.HerScore, record.NeededScore, record.WinForMe, record.MyPoints, record.HerPoints, convertSchemeToBytes(record.Scheme), record.WeekID,
 		)
 		if err != nil {
@@ -154,8 +154,8 @@ func (repo *dbRepo) Upsert(record Record) error {
 		}
 	} else {
 		_, err := repo.db.Exec(`
-			INSERT INTO records (weekID, my_score, her_score, needed_score, win_for_me, my_points, her_points, scheme) 
-			VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+			INSERT INTO records (WeekID, MyScore, HerScore, NeededScore, WinForMe, MyPoints, HerPoints, Scheme) 
+			VALUES (?, ROUND(?, 2), ROUND(?, 2), ROUND(?, 2), ?, ?, ?, ?)`,
 			record.WeekID, record.MyScore, record.HerScore, record.NeededScore, record.WinForMe, record.MyPoints, record.HerPoints, convertSchemeToBytes(record.Scheme),
 		)
 		if err != nil {
