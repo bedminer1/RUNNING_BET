@@ -3,9 +3,12 @@ package api
 import (
 	"database/sql"
 	"encoding/json"
+	"fmt"
+	"io"
 	"strconv"
 	"strings"
 	"sync"
+	"text/tabwriter"
 	"time"
 
 	_ "github.com/mattn/go-sqlite3"
@@ -170,4 +173,52 @@ func (repo *dbRepo) Upsert(record Record) error {
 func convertSchemeToBytes(scheme [][]float32) []byte {
 	data, _ := json.Marshal(scheme)
 	return data
+}
+
+func (repo *dbRepo) Fetch() (Records, error) {
+	rows, err := repo.db.Query("SELECT * FROM records")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var res Records
+	for rows.Next() {
+		var (
+			record     Record
+			schemeText string
+		)
+		err := rows.Scan(&record.WeekID, &record.MyScore, &record.HerScore, &record.NeededScore, &record.WinForMe, &record.MyPoints, &record.HerPoints, &schemeText)
+		if err != nil {
+			return nil, err
+		}
+
+		// deserialize scheme from string to [][]float32
+		err = json.Unmarshal([]byte(schemeText), &record.Scheme)
+		if err != nil {
+			return nil, err
+		}
+
+		res = append(res, record)
+	}
+
+	return res, nil
+}
+
+func printRecords(out io.Writer, records Records) {
+	// Create a new tabwriter to format the table output
+	w := tabwriter.NewWriter(out, 0, 0, 2, ' ', tabwriter.Debug)
+
+	// Print table headers
+	fmt.Fprintf(w, "WeekID\tMyScore\tHerScore\tNeededScore\tWinForMe\tMyPoints\tHerPoints\tScheme\n")
+	fmt.Fprintf(w, "------\t-------\t--------\t-----------\t---------\t---------\t---------\t------\n")
+
+	// Iterate through the slice of records
+	for _, record := range records {
+		// Print each record in the table
+		fmt.Fprintf(w, "%d\t%.2f\t%.2f\t%.2f\t%t\t%d\t%d\t%v\n", record.WeekID, record.MyScore, record.HerScore, record.NeededScore, record.WinForMe, record.MyPoints, record.HerPoints, record.Scheme)
+	}
+
+	// Flush the writer to ensure all rows are printed
+	w.Flush()
 }

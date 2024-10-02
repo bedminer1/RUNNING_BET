@@ -1,6 +1,7 @@
 package api_test
 
 import (
+	"bytes"
 	"testing"
 
 	"github.com/bedminer1/running_bet/api"
@@ -156,4 +157,29 @@ func TestSave(t *testing.T) {
 	if err := db.Save(fileDirectory, fileName); err != nil {
 		t.Errorf("Unexpected error saving file: %q", err)
 	}
+}
+
+func TestList(t *testing.T) {
+	db := &api.Records{}
+
+	expOut := `WeekID  |MyScore  |HerScore  |NeededScore  |WinForMe   |MyPoints   |HerPoints  |Scheme
+------  |-------  |--------  |-----------  |---------  |---------  |---------  |------
+1       |36.85    |9.07      |18.14        |true       |1          |0          |[[1000 2]]
+`
+
+	// fetch test data
+	fileDirectory := "../local_storage/"
+	fileName := "record_test"
+	fileType := "json"
+	if err := db.Get(fileDirectory, fileName, fileType); err != nil {
+		t.Error("Unexpected error getting data")
+	}
+
+	var out bytes.Buffer
+	db.List(&out)
+
+	if expOut != out.String() {
+		t.Errorf("Print output mismatch: expected %s, got %s", expOut, out.String())
+	}
+
 }

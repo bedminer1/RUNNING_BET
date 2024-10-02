@@ -3,6 +3,7 @@ package api
 import (
 	"encoding/json"
 	"fmt"
+	"io"
 	"os"
 )
 
@@ -97,4 +98,8 @@ func (db *Records) Save(fileDirectory, fileName string) error {
 
 
 	return nil
+}
+
+func (db *Records) List(out io.Writer) {
+	printRecords(out, *db)
 }
