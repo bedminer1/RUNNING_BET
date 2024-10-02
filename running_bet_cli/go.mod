@@ -3,6 +3,7 @@ module github.com/bedminer1/running_bet
 go 1.22.1
 
 require (
+	github.com/mattn/go-sqlite3 v1.14.23
 	github.com/spf13/cobra v1.8.1
 	github.com/spf13/viper v1.19.0
 )

@@ -44,6 +44,7 @@ func (db *Records) Add(myScore, herScore float32, scheme [][]float32) error {
 		Scheme:      scheme,
 	}
 	*db = append(*db, r)
+
 	return nil
 }
 
@@ -69,11 +70,30 @@ func (db *Records) Get(fileDirectory, fileName, fileType string) error {
 }
 
 func (db *Records) Save(fileDirectory, fileName string) error {
+	// saving to json
 	filePath := fmt.Sprintf("%s%s.json",fileDirectory, fileName)
 	js, err := json.Marshal(db)
 	if err != nil {
 		return err
 	}
+	if err := os.WriteFile(filePath, js, 0644); err != nil {
+		return err
+	}
 
-	return os.WriteFile(filePath, js, 0644)
+	// saving to SQLITE
+	sqlFilePath := fmt.Sprintf("%srecords.db", fileDirectory)
+	dbRepo, err := NewSQLite3Repo(sqlFilePath)
+	if err != nil {
+		return err
+	}
+
+	// For each record, check if it exists in the DB; if yes, update, otherwise insert
+	for _, record := range *db {
+		if err := dbRepo.Upsert(record); err != nil {
+			return err
+		}
+	}
+
+
+	return nil
 }

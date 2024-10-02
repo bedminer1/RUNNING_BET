@@ -1,9 +1,14 @@
 package api
 
 import (
+	"database/sql"
 	"encoding/json"
 	"strconv"
 	"strings"
+	"sync"
+	"time"
+
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func calculateScore(herScore float32, scheme [][]float32) float32 {
@@ -89,4 +94,80 @@ func parseJSON(data []byte) (Records, error) {
 	}
 
 	return res, nil
+}
+
+// saving to SQLITE
+const (
+	createTable string = `CREATE TABLE records (
+WeekID INTEGER PRIMARY KEY,
+MyScore REAL,
+HerScore REAL,
+NeededScore REAL,
+WinForMe BOOLEAN,
+MyPoints INTEGER,
+HerPoints INTEGER,
+Scheme TEXT
+);`
+)
+
+type dbRepo struct {
+	db *sql.DB
+	sync.RWMutex
+}
+
+func NewSQLite3Repo(dbfile string) (*dbRepo, error) {
+	db, err := sql.Open("sqlite3", dbfile)
+	if err != nil {
+		return nil, err
+	}
+	db.SetConnMaxLifetime(30 * time.Minute)
+	db.SetMaxOpenConns(1)
+
+	if err := db.Ping(); err != nil {
+		return nil, err
+	}
+
+	if _, err := db.Exec(createTable); err != nil {
+		return nil, err
+	}
+
+	return &dbRepo{
+		db: db,
+	}, nil
+}
+
+func (repo *dbRepo) Upsert(record Record) error {
+	var exists bool
+	err := repo.db.QueryRow("SELECT EXISTS(SELECT 1 FROM records WHERE weekID=?)", record.WeekID).Scan(&exists)
+	if err != nil {
+		return err
+	}
+
+	if exists {
+		_, err := repo.db.Exec(`
+			UPDATE records SET my_score=?, her_score=?, needed_score=?, win_for_me=?, my_points=?, her_points=?, scheme=?
+			WHERE weekID=?`,
+			record.MyScore, record.HerScore, record.NeededScore, record.WinForMe, record.MyPoints, record.HerPoints, convertSchemeToBytes(record.Scheme), record.WeekID,
+		)
+		if err != nil {
+			return err
+		}
+	} else {
+		_, err := repo.db.Exec(`
+			INSERT INTO records (weekID, my_score, her_score, needed_score, win_for_me, my_points, her_points, scheme) 
+			VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+			record.WeekID, record.MyScore, record.HerScore, record.NeededScore, record.WinForMe, record.MyPoints, record.HerPoints, convertSchemeToBytes(record.Scheme),
+		)
+		if err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
+
+// Helper function to convert Scheme to a byte array for storage in SQLite
+func convertSchemeToBytes(scheme [][]float32) []byte {
+	data, _ := json.Marshal(scheme)
+	return data
 }
