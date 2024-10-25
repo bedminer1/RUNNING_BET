@@ -175,7 +175,7 @@ func convertSchemeToBytes(scheme [][]float32) []byte {
 	return data
 }
 
-func (repo *dbRepo) Fetch() (Records, error) {
+func (repo *dbRepo) FetchAll() (Records, error) {
 	rows, err := repo.db.Query("SELECT * FROM records")
 	if err != nil {
 		return nil, err
@@ -222,3 +222,5 @@ func printRecords(out io.Writer, records Records) {
 	// Flush the writer to ensure all rows are printed
 	w.Flush()
 }
+
+// TODO viewOne when adding, default to viewing in reverse, -r flag for viewing from weekid=1
