@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { superForm } from 'sveltekit-superforms'
 	import { Paginator, getToastStore } from '@skeletonlabs/skeleton'
-	import { CalculateCutoff } from '$lib/calculate.js';
+	import { CalculateCutoff } from '$lib/utils/calculate.js';
 
 	export let data
 

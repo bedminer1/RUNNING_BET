@@ -3,7 +3,7 @@ import path from "path"
 import { parseRecord } from "$lib/utils/parseRecords"
 
 export const load = async () => {
-    const filePath = path.resolve("src/lib/record.txt")
+    const filePath = path.resolve("src/lib/local_storage/record.txt")
     let rawInput = ""
     let records: WeeklyRecord[] = []
 

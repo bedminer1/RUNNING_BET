@@ -20,7 +20,7 @@ const schema = z.object({
 
 export const load = async () => {
     const form = await superValidate(zod(schema))
-    const filePath = path.resolve("src/lib/record.txt")
+    const filePath = path.resolve("src/lib/local_storage/record.txt")
     let rawInput = ""
     let records: WeeklyRecord[] = []
 
