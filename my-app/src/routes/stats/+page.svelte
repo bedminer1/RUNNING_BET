@@ -1,4 +1,6 @@
 <script lang="ts">
+    import LineChart from '$lib/components/LineChart.svelte';
+
     export let data
     let records = data.records
 
@@ -35,6 +37,10 @@
     // streak system showing number of weeks where person ran more than X (their goal)
 
     let ChartData = [];
+    let accmData = {
+        alexAccmScores: alexAccmScores,
+        yoonaAccmScores: yoonaAccmScores
+    }
     for (let i = 0; i < alexScores.length; i++) {
         ChartData.push({
             Week: i + 1,
@@ -48,7 +54,10 @@
     }
 
 
-    console.table(ChartData)
+    // console.table(ChartData)
 </script>
 
-<h1>hi</h1>
+<h1>hi there</h1>
+<div class="w-screen border-2 h-full">
+    <LineChart {...accmData}></LineChart>
+</div>
