@@ -57,7 +57,10 @@
     // console.table(ChartData)
 </script>
 
-<h1>hi there</h1>
-<div class="w-screen border-2 h-full">
-    <LineChart {...accmData}></LineChart>
+<div class="flex flex-col w-full justify-center items-center gap-20 h-screen">
+    <div class="w-1/2">
+        <LineChart {...{statsArrOne: alexAccmScores, statsArrTwo: yoonaAccmScores, label: "Accumulated Score"}}></LineChart>
+        <LineChart {...{statsArrOne: alexScores, statsArrTwo: yoonaScores, label: "Weekly Scores"}}></LineChart>
+        <LineChart {...{statsArrOne: alexPoints, statsArrTwo: yoonaPoints, label: "Points"}}></LineChart>
+    </div>
 </div>

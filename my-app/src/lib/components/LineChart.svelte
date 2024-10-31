@@ -5,31 +5,31 @@
     // Register necessary Chart.js components
     Chart.register(LineController, LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend);
 
-    let { alexAccmScores, yoonaAccmScores }: { alexAccmScores: number[], yoonaAccmScores: number[]} = $props()
+    let { statsArrOne, statsArrTwo, label }: { statsArrOne: number[], statsArrTwo: number[], label: string} = $props()
 
     let chart: Chart | null = null;
     let chartCanvas: HTMLCanvasElement;
 
     onMount(() => {
-        if (chart) {
+        if (chart) { // update
             chart.destroy();
         }
 
         chart = new Chart(chartCanvas, {
             type: 'line',
             data: {
-                labels: alexAccmScores.map((_, i) => `Week ${i + 1}`),
+                labels: statsArrOne.map((_, i) => `Week ${i + 1}`),
                 datasets: [
                     {
-                        label: 'Alex Accumulated Scores',
-                        data: alexAccmScores,
+                        label: 'Alex ' + label,
+                        data: statsArrOne,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         backgroundColor: 'rgba(75, 192, 192, 0.2)',
                         fill: true,
                     },
                     {
-                        label: 'Yoona Accumulated Scores',
-                        data: yoonaAccmScores,
+                        label: 'Yoona ' + label,
+                        data: statsArrTwo,
                         borderColor: 'rgba(255, 99, 132, 1)',
                         backgroundColor: 'rgba(255, 99, 132, 0.2)',
                         fill: true,
@@ -62,7 +62,7 @@
     });
 </script>
 
-<canvas class="w-full " bind:this={chartCanvas}></canvas>
+<canvas class="w-full" bind:this={chartCanvas}></canvas>
 
 
 
