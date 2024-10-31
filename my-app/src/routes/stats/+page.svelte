@@ -28,20 +28,45 @@
     let yoonaAccmScore = 0
 
     for (let i = 0; i < alexScores.length; i++) {
-    alexAccmScore += alexScores[i];
-    yoonaAccmScore += yoonaScores[i];
+        alexAccmScore += alexScores[i]
+        yoonaAccmScore += yoonaScores[i]
 
-    // Format to 2 decimal places and convert back to float
-    alexAccmScores[i] = parseFloat(alexAccmScore.toFixed(2));
-    yoonaAccmScores[i] = parseFloat(yoonaAccmScore.toFixed(2));
-}
-    // streak system showing number of weeks where person ran more than X (their goal)
-
-    let ChartData = [];
-    let accmData = {
-        alexAccmScores: alexAccmScores,
-        yoonaAccmScores: yoonaAccmScores
+        // Format to 2 decimal places and convert back to float
+        alexAccmScores[i] = parseFloat(alexAccmScore.toFixed(2))
+        yoonaAccmScores[i] = parseFloat(yoonaAccmScore.toFixed(2))
     }
+
+    // streak system showing number of weeks where person ran more than X (their goal)
+    let alexStreakGoal: number = 5
+    let alexStreakDays: number[] = new Array(alexScores.length).fill(0)
+    let yoonaStreakGoal: number = 7
+    let yoonaStreakDays: number[] = new Array(yoonaScores.length).fill(0)
+
+    $: {
+        for (let i = 0; i < alexScores.length; i++) {
+            if (alexScores[i] > alexStreakGoal) {
+                if (i === 0) {
+                    alexStreakDays[i] = 1
+                } else {
+                    alexStreakDays[i] = alexStreakDays[i-1] + 1
+                }
+            }
+    
+            if (yoonaScores[i] > yoonaStreakGoal) {
+                if (i === 0) {
+                    yoonaStreakDays[i] = 1
+                } else {
+                    yoonaStreakDays[i] = yoonaStreakDays[i-1] + 1
+                }
+            }
+        }
+    }
+
+
+
+
+    let ChartData = []
+
     for (let i = 0; i < alexScores.length; i++) {
         ChartData.push({
             Week: i + 1,
@@ -51,7 +76,7 @@
             yoonaPoints: yoonaPoints[i],
             alexAccmScores: alexAccmScores[i],
             yoonaAccmScores: yoonaAccmScores[i],
-        });
+        })
     }
 
 
@@ -111,6 +136,17 @@
                 { label: 'Alex', data: alexPoints, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
                 { label: 'Yoona', data: yoonaPoints, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' }
             ], label: "Points"}}></LineChart>
+        </div>
+
+        <div class="w-1/3">
+            <input type="number" class="input" bind:value={alexStreakGoal}>
+            <input type="number" class="input" bind:value={yoonaStreakGoal}>
+        </div>
+        <div class="mb-10 border-2 border-dotted rounded-lg px-4 py-2">
+            <LineChart {...{stats: [
+                { label: 'Alex', data: alexStreakDays, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
+                { label: 'Yoona', data: yoonaStreakDays, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' }
+            ], label: "Streaks"}}></LineChart>
         </div>
     </div>
 </div>

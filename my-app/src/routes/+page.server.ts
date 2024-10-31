@@ -41,7 +41,7 @@ export const load = async () => {
 
 export const actions = {
     saveRecord: async ({ request }) => {
-        const filePath = path.resolve("src/lib/record.txt")
+        const filePath = path.resolve("src/lib/local_storage/record.txt")
 
         try {
             const form = await superValidate(request, zod(schema))
