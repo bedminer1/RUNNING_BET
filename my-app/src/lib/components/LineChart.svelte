@@ -7,8 +7,11 @@
 
     let { statsArrOne, statsArrTwo, label }: { statsArrOne: number[], statsArrTwo: number[], label: string} = $props()
 
-    let chart: Chart | null = null;
-    let chartCanvas: HTMLCanvasElement;
+    let chart: Chart | null = null
+    Chart.defaults.color = 'rgb(250,255,255)'
+    Chart.defaults.font.size = 14
+    let chartCanvas: HTMLCanvasElement
+
 
     onMount(() => {
         if (chart) { // update
@@ -43,7 +46,7 @@
                         beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Scores'
+                            text: label,
                         }
                     },
                     x: {
@@ -52,7 +55,7 @@
                             text: 'Weeks'
                         }
                     }
-                }
+                },
             }
         });
 
