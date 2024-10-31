@@ -138,6 +138,10 @@
 		showPreviousNextButtons="{true}"
 		amountText="Records"
 	/>
+
+	<p class="w-full text-right underline italic mt-4"><a href="/stats">see stats?</a></p>
+		
+
 </div>
 
 </div>

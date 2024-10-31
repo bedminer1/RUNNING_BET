@@ -19,8 +19,8 @@ function calculateScores(input: string) {
 }
 
 // variables to access the txt files containing the scores
-const filePathAlex = path.resolve("src/lib/alexScores.txt")
-const filePathYoona = path.resolve("src/lib/yoonaScores.txt")
+const filePathAlex = path.resolve("src/lib/local_storage/alexScores.txt")
+const filePathYoona = path.resolve("src/lib/local_storage/yoonaScores.txt")
 const inputAlex = fs.readFileSync(filePathAlex, "utf-8")
 const inputYoona = fs.readFileSync(filePathYoona, "utf-8")
 const resAlex = calculateScores(inputAlex)
@@ -107,5 +107,5 @@ function arrayToString(records: WeeklyRecord[]) {
 }
 
 let outputTxt = arrayToString(records)
-const outputFilePath = path.resolve("src/lib/autoTallyOutput.txt")
+const outputFilePath = path.resolve("src/lib/local_storage/autoTallyOutput.txt")
 fs.writeFileSync(outputFilePath, outputTxt, 'utf-8')
