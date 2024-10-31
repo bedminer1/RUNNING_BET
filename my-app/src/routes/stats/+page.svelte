@@ -7,17 +7,18 @@
     // graph comparing points overtime
     let alexPoints: number[] = []
     let yoonaPoints: number[] = []
-    for (let r of records) {
-        alexPoints.push(r.myPoints!)
-        yoonaPoints.push(r.herPoints!)
-    }
     
     // graph comparing distance ran per week
     let alexScores: number[] = []
     let yoonaScores: number[] = []
+    let neededScores: number[] = []
+
     for (let r of records) {
+        alexPoints.push(r.myPoints!)
+        yoonaPoints.push(r.herPoints!)
         alexScores.push(r.myScore!)
         yoonaScores.push(r.herScore!)
+        neededScores.push(r.neededScore!)
     }
 
     // graph showing total distance ran
@@ -75,7 +76,10 @@
             </div>
         </div>
         <div class="mb-10 border-2 border-dotted rounded-lg px-4 py-2">
-            <LineChart {...{statsArrOne: alexAccmScores, statsArrTwo: yoonaAccmScores, label: "Accumulated Score"}}></LineChart>
+            <LineChart {...{stats: [
+                { label: 'Alex', data: alexAccmScores, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
+                { label: 'Yoona', data: yoonaAccmScores, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' }
+            ], label: "Accumulated Score"}}></LineChart>
         </div>
 
         <div class="mb-4">
@@ -87,7 +91,11 @@
             </div>
         </div>
         <div class="mb-10 border-2 border-dotted rounded-lg px-4 py-2">
-            <LineChart {...{statsArrOne: alexScores, statsArrTwo: yoonaScores, label: "Weekly Scores"}}></LineChart>
+            <LineChart {...{stats: [
+                { label: 'Alex', data: alexScores, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
+                { label: 'Yoona', data: yoonaScores, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' },
+                { label: 'Needed', data: neededScores, borderColor: 'rgba(255, 165, 0, 1)', backgroundColor: 'rgba(255, 165, 0, 0.2)' },
+            ], label: "Weekly Scores"}}></LineChart>
         </div>
 
         <div class="mb-4">
@@ -99,7 +107,10 @@
             </div>
         </div>
         <div class="mb-10 border-2 border-dotted rounded-lg px-4 py-2">
-            <LineChart {...{statsArrOne: alexPoints, statsArrTwo: yoonaPoints, label: "Points"}}></LineChart>
+            <LineChart {...{stats: [
+                { label: 'Alex', data: alexPoints, borderColor: 'rgba(75, 192, 192, 1)', backgroundColor: 'rgba(75, 192, 192, 0.2)' },
+                { label: 'Yoona', data: yoonaPoints, borderColor: 'rgba(255, 99, 132, 1)', backgroundColor: 'rgba(255, 99, 132, 0.2)' }
+            ], label: "Points"}}></LineChart>
         </div>
     </div>
 </div>

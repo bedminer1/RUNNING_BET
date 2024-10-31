@@ -27,3 +27,10 @@ interface RawWeeklyRecord {
 	neededScore?: number
 	winForMe: boolean
 }
+
+interface DataSet {
+	label: string
+	data: number[]
+	borderColor: string
+	backgroundColor: string
+}
